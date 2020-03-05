@@ -1,0 +1,9 @@
+<?php
+
+define("OPENWEATHERMAP_ACCESS_KEY", "55fc030a936d5e205ca578d8a03011ba");
+define("WORLDWEATHERONLINE_ACCESS_KEY","d48ab845d78e492081b192620202001");
+define("WEATHERSTACK_ACCESS_KEY", "719d3fe6203f73509524e0bca348cb53");
+
+define("a", array(1 => new MyClass()));
+
+?>
