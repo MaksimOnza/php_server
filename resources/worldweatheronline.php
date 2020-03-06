@@ -11,12 +11,11 @@ class WorldweatheronlineResource{
 		return $response;
 	}
 
-
 	function get_json($data){
 	$data = json_decode($data, true);
 		$json_data = array(
-			'temp'=> data['data']['current_condition'][0]['temp_C'],
-			'desc'=> data['data']['current_condition'][0]['weatherDesc'][0]['value']
+			"temp"=> $data['data']['current_condition'][0]['temp_C'],
+			"desc"=> $data['data']['current_condition'][0]['weatherDesc'][0]['value']
 		);
 	return $json_data;
 	}
