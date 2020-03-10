@@ -19,8 +19,9 @@ class HttpProcessor{
 	}
 
 	function do_GET(){
+		readfile('form.html');
 		$city = $_GET['city'];
-		$resource = $_GET['resource'];
+		$resource = $_GET['resources'];
 		if($this->operator->check_cache($resource.$city)){
 			$data_weather = $this->operator->kesh_dict;
 		}else{
@@ -36,9 +37,14 @@ class HttpProcessor{
 			'time'=> time()
 			);
 
-		echo ' City is	'.$city;echo PHP_EOL;
-		echo ' temp = '.$temperature;echo PHP_EOL;
-		echo ' desc -- '.$description;echo PHP_EOL;
+		while($temperature){
+			echo 'ERROR l';
+			break;
+		}
+		echo ' City ->	'.$city;echo '<Br>';
+		echo ' temperature -> '.$temperature;echo '<Br>';
+		echo ' desc -> '.$description;
+
 	}
 
 	function get_data_weather($resource, $city){
