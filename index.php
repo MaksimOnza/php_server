@@ -37,13 +37,16 @@ class HttpProcessor{
 			'time'=> time()
 			);
 
-		while($temperature){
-			echo 'ERROR l';
+		while($description){
+			echo ' City ->	'.$city;echo '<Br>';
+			echo ' temperature -> '.$temperature;echo '<Br>';
+			echo ' desc -> '.$description;
 			break;
 		}
-		echo ' City ->	'.$city;echo '<Br>';
-		echo ' temperature -> '.$temperature;echo '<Br>';
-		echo ' desc -> '.$description;
+		while(!$description){
+			echo 'Maybye wrong the city?s';
+			break;
+		}
 
 	}
 
