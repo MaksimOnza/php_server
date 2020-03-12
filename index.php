@@ -1,59 +1,57 @@
 <?php
 
 require_once('config.php');
-require_once('cashedata.php');
+require_once('cache.php');
+require_once('count.php');
 require_once('resources/openweathermap.php');
 require_once('resources/weatherstack.php');
 require_once('resources/worldweatheronline.php');
 
 
-class HttpProcessor{
+class HttpServer{
 		
+	private $operator;
+	private $_resources = [];
 
-	function __construct(){
+	public function __construct(){
+		$this->operator = new Cache();
 		$this->_resources = array(
 			'weatherstack' => new WeatherstackResource(WEATHERSTACK_ACCESS_KEY),
 			'openweathermap' => new OpenweathermapResource(OPENWEATHERMAP_ACCESS_KEY),
 			'worldweatheronline' => new WorldweatheronlineResource(WORLDWEATHERONLINE_ACCESS_KEY),
 		);
-		$this->operator = new CacheData();
 	}
 
-
-	function do_GET(){
+	public function start(){
 		readfile('form.html');
 		$city = $_GET['city'];
 		$resource = $_GET['resources'];
-		if($this->operator->check_cache($resource.$city)){
-			$data_weather = $this->operator->kesh_dict;
-		}else{
+		$data_weather = $this->operator->get($city.$resource);
+		if(!$data_weather)
+		{
 			$data_weather = $this->get_data_weather($resource, $city);
 		}
-		$this->operator->kesh_dict = array(
-			$city.$resource => array(	
-					'temp'=> $data_weather['temp'],
-					'desc'=> $data_weather['desc'],
-					),
-			'time'=> time()
-			);
-		$this->display_weather($this->operator->kesh_dict, $city.$resource);
+		$this->operator->add($city.$resource, $data_weather, 3600);
+		$this->display_weather($data_weather);
+		echo $this->display_weather($data_weather);
+		echo '</br>';
+		$counter = new Counter();
+		echo 'counter = '.$counter->get();
 	}
 
 
-	function display_weather($array, $resource){
-		$description = $this->operator->kesh_dict[$resource]['desc'];
-		while($description){
-			echo json_encode($this->operator->kesh_dict[$resource]);
-			return json_encode($this->operator->kesh_dict[$resource]);
+	private function display_weather($data_weather)
+	{
+		$description = $data_weather['desc'];
+		if(!($description == ''))
+		{
+			return json_encode($data_weather);
 		}
-		while(!$description){
-			echo 'Maybye wrong the city?';
-			break;
-		}
+		return 'wrong city';
 	}
 
 
-	function get_data_weather($resource, $city){
+	private function get_data_weather($resource, $city){
 		$data_weather = $this->_resources[$resource];
 		$get_data = $data_weather->get_data($city);
 		return $data_weather->get_json($get_data);
@@ -63,6 +61,5 @@ class HttpProcessor{
 
 
 
-$start = new HttpProcessor();
-$start->do_GET();
- ?>
+$start = new HttpServer();
+$start->start();
