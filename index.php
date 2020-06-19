@@ -1,5 +1,4 @@
 <?php
-
 require_once('config.php');
 require_once('cache.php');
 require_once('count.php');
@@ -14,7 +13,7 @@ class HttpServer{
 	private $_resources = [];
 
 	public function __construct(){
-		$this->operator = new Cache();
+		$this->operator = new Cache(10);
 		$this->_resources = array(
 			'weatherstack' => new WeatherstackResource(WEATHERSTACK_ACCESS_KEY),
 			'openweathermap' => new OpenweathermapResource(OPENWEATHERMAP_ACCESS_KEY),
@@ -26,17 +25,13 @@ class HttpServer{
 		readfile('form.html');
 		$city = $_GET['city'];
 		$resource = $_GET['resources'];
-		$data_weather = $this->operator->get($city.$resource);
+		$data_weather = $this->operator->get($resource.$city);
 		if(!$data_weather)
 		{
 			$data_weather = $this->get_data_weather($resource, $city);
+			$this->operator->set($resource.$city, $data_weather);
 		}
-		$this->operator->add($city.$resource, $data_weather, 3600);
-		$this->display_weather($data_weather);
 		echo $this->display_weather($data_weather);
-		echo '</br>';
-		$counter = new Counter();
-		echo 'counter = '.$counter->get();
 	}
 
 

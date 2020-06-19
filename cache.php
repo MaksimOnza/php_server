@@ -1,27 +1,32 @@
 <?php
 
+require_once('manag_cashe.php');
+
+
 class Cache
 {
 
-	private $cache = [];
+	private $ttl1;
+	private $manag_cashe;
 
-	public function add($key, $data, $ttl)
+	function __construct($ttl){
+		$this->manag_cashe = new ManagCashe();
+		$this->ttl1 = $ttl;
+	}
+
+	public function set($key, $data)
 	{
-		$this->cache = array(
-			$key => array(
-				'data' => $data,
-				'time'=> $ttl,
-				'expire_time' => time() + $ttl
-			)
-		);
+		$this->manag_cashe->set_cashe($key, $data, time() + $this->ttl1);
 	}
 
 	public function get($key)
 	{
-		if($this->cache[$key]['expire_time'] < time())
-		{
-			return $this->cache[$key];
+		try{
+			return $this->manag_cashe->get_cashe($key);
 		}
-		return null;
+		catch(Exception $e){
+			return False;
+		}
 	}
 }
+
