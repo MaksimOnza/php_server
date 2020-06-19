@@ -1,4 +1,4 @@
  
-Запуск проекта:
-- в терминале запускаем сервер на пхп: php -S localhost:8000
-- после запуска сервера открываем файл form.html
+Launching the project:
+- in terminal run the php-server: php -S localhost:8000
+- open the file form.html in browser
