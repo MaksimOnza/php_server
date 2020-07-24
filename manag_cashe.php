@@ -17,22 +17,21 @@ class ManagCashe{
 
     public function get_cashe($key){
         if (($handle = fopen("test.csv", "r")) !== FALSE) {
-            $i = 0;
+            $numOfColumn = 0;
             $index = 0;
-            $r = 0;
+            $numOfRow = 0;
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
                 foreach($data as $row){
                     if(($row == 'data')){
-                        $index = $i;
+                        $index = $numOfColumn;
                         continue;
                     }
                 }
-                $i++;
+                $numOfColumn++;
                 if(in_array($key, $data) and ((int)($row) > time())){
-                    echo 'BINGO!';
-                    return $data;
+                    return $data[$index+1];
                 }
-                $r++;
+                $numOfRow++;
             }
         return False;
         fclose($handle);

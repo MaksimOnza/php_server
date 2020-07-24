@@ -1,15 +1,15 @@
 <?php
-    function check_param($out_param){
-      foreach($_GET['parameters'] as $element){
-        if($element==$out_param){
-          return true;
-        }
+  function check_param($out_param){
+    foreach($_GET['parameters'] as $element){
+      if($element==$out_param){
+        return true;
       }
-      return false;
     }
+    return false;
+  }
 
-    function html_input($name, $type='text'){
-      return '<input type="'.$type.'" value="'.$_GET[$name].'" name="'.$name.'">';
+  function html_input($name, $type='text'){
+    return '<input type="'.$type.'" value="'.$_GET[$name].'" name="'.$name.'">';
   }
 
   function html_select($name, $options){
@@ -25,40 +25,49 @@
       return '<select name="'.$name.'">'.$row.'</select>';
   }
 
+  function html_checkbox($value_parameter){
+    $empty_row = '';
+    $checked_row = 'checked';
+    $row = '<input type="checkbox" name="parameters[]" value="'.$value_parameter.'"';
+    $checked = check_param($value_parameter)?$checked_row:$empty_row;
+    return $row.' '.$checked.'>';
+  }
+
 
 ?>
-<form>
-    <h4>Enter the city:</h4>
-    <?= html_input('city') ?><Br>
-        <h3 >Select a resource API</h3>
-        <?= html_select('resources', [
-            'openweathermap',
-            'weatherstack',
-            'worldweatheronline'
-        ]) ?>
+<form action="index.php" method="GET">
+  <h4>Enter the city:</h4>
+  <?= html_input('city') ?><Br>
+      <h3 >Select a resource API</h3>
+      <?= html_select('resources', [
+          'openweathermap',
+          'weatherstack',
+          'worldweatheronline'
+      ]) ?>
 
-      <p>Select a parameters:</p>
+    <p>Select a parameters:</p>
 
-     <p><input type="checkbox" name="parameters[]" value="wind" <?php echo check_param('wind')?'checked':'' ?>> wind</p>
-     <p><input type="checkbox" name="parameters[]" value="pres" <?php echo check_param('pres')?'checked':'' ?>> pressure</p>
-     <p><input type="checkbox" name="parameters[]" value="temp" <?php echo check_param('temp')?'checked':'' ?>> temperature</p>
-     <p><input type="checkbox" name="parameters[]" value="desc" <?php echo check_param('desc')?'checked':'' ?>> description</p>
-     <p><input type="checkbox" name="function_json2" value="true" > function get_json2()</p>
-     <p><input type="submit" value="Get the weather"></p>
-  </form>
-  <form action="display_table.php" method="GET">
-    <input type="submit" value="Display in table">
-  </form>
+   <p><?= html_checkbox('wind') ?> wind</p>
+   <p><?= html_checkbox('pres') ?> pressure</p>
+   <p><?= html_checkbox('temp') ?> temperature</p>
+   <p><?= html_checkbox('desc') ?> description</p>
+   <p><input type="checkbox" name="function_json2" value="true" > function get_json2()</p>
+   <p><input type="submit" value="Get the weather"></p>
+</form>
+<form action="display_table.php" method="GET">
+  <input type="submit" value="Display in table">
+</form>
    
    <?php 
       check_param('pres');
       ?>
+
 </body>
 </html>
 
 
 
 
-input функция для чекбоксов.
+<!-- input функция для чекбоксов.
 выбор параметров доделать.
-выод результата через JS alert.
+вывод результата через JS alert. -->
